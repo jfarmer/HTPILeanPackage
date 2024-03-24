@@ -70,13 +70,13 @@ theorem Example_3_3_5 (U : Type) (B : Set U)
   fix x : Set U
   assume h2 : x ∈ F
   define
-  fix y
+  fix y : U
   assume h3: y ∈ x
   define at h1
   apply h1 _
   define
   apply Exists.intro x
-  apply And.intro h2 h3
+  exact And.intro h2 h3
   done
 -- 2.
 theorem Exercise_3_3_8 (U : Type) (F : Set (Set U)) (A : Set U)
@@ -85,8 +85,10 @@ theorem Exercise_3_3_8 (U : Type) (F : Set (Set U)) (A : Set U)
   fix a
   assume h2 : a ∈ A
   define
-  apply Exists.intro A _
-  apply And.intro h1 h2
+  apply Exists.intro A
+
+  -- Can use \langle ... \rangle instead of And.intro
+  show A ∈ F ∧ a ∈ A from ⟨h1, h2⟩
   done
 
 -- 3.
