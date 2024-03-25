@@ -199,12 +199,48 @@ theorem Exercise_3_3_17 (U : Type) (F G : Set (Set U))
 -- 5.
 theorem Exercise_3_4_7 (U : Type) (A B : Set U) :
     𝒫 (A ∩ B) = 𝒫 A ∩ 𝒫 B := by
+  ext S
+  apply Iff.intro
+  · assume h1 : S ∈ 𝒫 (A ∩ B)
+    define at h1
+    define
+    apply And.intro
+    · define
+      fix a
+      assume aS : a ∈ S
+      exact (h1 aS).left
+    · define
+      fix a
+      assume aS : a ∈ S
+      exact (h1 aS).right
+    done
+  · assume h1 : S ∈ 𝒫 A ∩ 𝒫 B
+    fix a : U
+    assume aS : a ∈ S
 
+    exact ⟨h1.left aS, h1.right aS⟩
+    done
   done
 
 -- 6.
 theorem Exercise_3_4_17 (U : Type) (A : Set U) : A = ⋃₀ (𝒫 A) := by
-
+  ext c
+  apply Iff.intro
+  · assume h1 : c ∈ A
+    define
+    apply Exists.intro A
+    apply And.intro
+    · define
+      fix a
+      assume h2
+      exact h2
+    exact h1
+    done
+  · assume h1 : c ∈ ⋃₀ (𝒫 A)
+    define at h1
+    obtain t h2 from h1
+    exact h2.left h2.right
+    done
   done
 
 -- 7.
