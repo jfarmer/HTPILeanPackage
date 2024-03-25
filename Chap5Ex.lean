@@ -80,7 +80,20 @@ theorem Exercise_5_2_10a {A B C : Type} (f: A → B) (g : B → C) :
 
 -- 2.
 theorem Exercise_5_2_10b {A B C : Type} (f: A → B) (g : B → C) :
-    one_to_one (g ∘ f) → one_to_one f := sorry
+    one_to_one (g ∘ f) → one_to_one f := by
+  assume igof
+  define at igof;define
+
+  fix a1;fix a2
+  assume hfa
+
+  have hgf : (g ∘ f) a1 = (g ∘ f) a2 := by
+    rw [comp_def]; rw [comp_def]
+    rw [hfa]
+    done
+
+  exact igof a1 a2 hgf
+  done
 
 -- 3.
 theorem Exercise_5_2_11a {A B C : Type} (f: A → B) (g : B → C) :
