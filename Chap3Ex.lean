@@ -51,11 +51,14 @@ theorem Exercise_3_3_1
     (U : Type) (P Q : Pred U) (h1 : ∃ (x : U), P x → Q x) :
     (∀ (x : U), P x) → ∃ (x : U), Q x := by
 
+  -- Solution 1
   -- obtain (a : U) (h1' : P a → Q a) from h1
   -- assume h3 : (∀ (x : U), P x)
   -- have h4 : P a := h3 a
   -- have h5 : Q a := h1' h4
-  -- apply Exists.intro a h5
+  -- exact Exists.intro a h5
+
+  -- Solution 2
   assume h
   obtain a PaQa from h1
   have hQ := PaQa (h a)
@@ -142,7 +145,7 @@ theorem Exercise_3_4_2 (U : Type) (A B C : Set U)
   define at h2
   have xB : x ∈ B := h1 xA
   have xC : x ∈ C := h2 xA
-  apply And.intro xB xC
+  exact And.intro xB xC
   done
 
 -- 2.
@@ -160,7 +163,7 @@ theorem Exercise_3_4_4 (U : Type) (A B C : Set U)
   quant_neg
   apply Exists.intro x _
   conditional
-  apply And.intro xB x!C
+  exact And.intro xB x!C
   done
 
 -- 3.
