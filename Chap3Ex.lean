@@ -260,18 +260,18 @@ theorem Exercise_3_4_19 (U : Type) (F G : Set (Set U)) :
 -- 1.
 theorem Exercise_3_5_2 (U : Type) (A B C : Set U) :
     (A ∪ B) \ C ⊆ A ∪ (B \ C) := by
-    define
-    fix x : U
-    assume h1
-    define
-    define at h1
-    by_cases on h1.left
-    ·
-      apply Or.inl
-      show x ∈ A from this
-    ·
-      apply Or.inr
-      show x ∈ B \ C from ⟨this, h1.right⟩
+  define
+  fix x : U
+  assume h1
+  define
+  define at h1
+  by_cases on h1.left
+  ·
+    apply Or.inl
+    show x ∈ A from this
+  ·
+    apply Or.inr
+    show x ∈ B \ C from ⟨this, h1.right⟩
 
 -- 2.
 theorem Exercise_3_5_5 (U : Type) (A B C : Set U)
@@ -337,7 +337,17 @@ theorem Exercise_3_6_10 (U : Type) (A : Set U)
 /- Section 3.7 -/
 -- 1.
 theorem Exercise_3_3_18a (a b c : Int)
-    (h1 : a ∣ b) (h2 : a ∣ c) : a ∣ (b + c) := sorry
+    (h1 : a ∣ b) (h2 : a ∣ c) : a ∣ (b + c) := by
+  define
+  define at h1
+  define at h2
+
+  obtain (k : ℤ) (hk : b = a * k) from h1
+  obtain (j : ℤ) (hj : c = a * j) from h2
+
+  apply Exists.intro (k + j)
+  rw [mul_add, ← hk, ← hj]
+  done
 
 -- 2.
 theorem Exercise_3_4_6 (U : Type) (A B C : Set U) :
@@ -354,8 +364,21 @@ theorem Exercise_3_4_6 (U : Type) (A B C : Set U) :
 
 -- 3.
 theorem Exercise_3_4_10 (x y : Int)
-    (h1 : odd x) (h2 : odd y) : even (x - y) := sorry
+    (h1 : odd x) (h2 : odd y) : even (x - y) := by
+define
+define at h1
+define at h2
 
+obtain k hk from h1
+obtain j hj from h2
+
+apply Exists.intro (k-j)
+
+rw [hk, hj]
+
+ring
+
+done
 -- 4.
 theorem Exercise_3_4_27a :
     ∀ (n : Int), 15 ∣ n ↔ 3 ∣ n ∧ 5 ∣ n := sorry
