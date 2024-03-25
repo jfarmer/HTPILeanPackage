@@ -1,5 +1,4 @@
 {
-    "workbench.colorTheme": "Visual Studio Light",
     "editor.semanticHighlighting.enabled": true,
     "lean4.infoview.showExpectedType": false,
 }
