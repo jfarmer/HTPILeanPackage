@@ -57,8 +57,8 @@ theorem Exercise_3_3_1
   -- have h5 : Q a := h1' h4
   -- apply Exists.intro a h5
   assume h
-  obtain a ha from h1
-  have hQ := ha (h a)
+  obtain a PaQa from h1
+  have hQ := PaQa (h a)
   apply Exists.intro a
   show Q a from hQ
   done
@@ -259,7 +259,19 @@ theorem Exercise_3_4_19 (U : Type) (F G : Set (Set U)) :
 /- Section 3.5 -/
 -- 1.
 theorem Exercise_3_5_2 (U : Type) (A B C : Set U) :
-    (A ∪ B) \ C ⊆ A ∪ (B \ C) := sorry
+    (A ∪ B) \ C ⊆ A ∪ (B \ C) := by
+    define
+    fix x : U
+    assume h1
+    define
+    define at h1
+    by_cases on h1.left
+    ·
+      apply Or.inl
+      show x ∈ A from this
+    ·
+      apply Or.inr
+      show x ∈ B \ C from ⟨this, h1.right⟩
 
 -- 2.
 theorem Exercise_3_5_5 (U : Type) (A B C : Set U)
