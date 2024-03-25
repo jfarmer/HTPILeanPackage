@@ -4,7 +4,24 @@ namespace HTPI.Exercises
 /- Section 5.1 -/
 -- 1.
 theorem func_from_graph_ltr {A B : Type} (F : Set (A × B)) :
-    (∃ (f : A → B), graph f = F) → is_func_graph F := sorry
+    (∃ (f : A → B), graph f = F) → is_func_graph F := by
+  assume h1
+  obtain f hf from h1
+  define
+
+  fix a : A
+
+  exists_unique
+  · apply Exists.intro (f a)
+    rw [←hf]
+    rfl
+  · fix b1; fix b2
+    assume hb1; assume hb2
+    rw [←hf] at hb1
+    rw [←hf] at hb2
+    define at hb1; define at hb2
+    rw [←hb1, ←hb2]
+  done
 
 -- 2.
 theorem Exercise_5_1_13a
