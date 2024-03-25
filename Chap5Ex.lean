@@ -67,7 +67,16 @@ theorem Exercise_5_1_17b {A : Type} (f : A → A) (a : A)
 /- Section 5.2 -/
 -- 1.
 theorem Exercise_5_2_10a {A B C : Type} (f: A → B) (g : B → C) :
-    onto (g ∘ f) → onto g := sorry
+    onto (g ∘ f) → onto g := by
+  assume hgof
+  define at hgof; define
+  fix c : C
+
+  obtain a ha from hgof c
+
+  apply Exists.intro (f a)
+  exact ha
+  done
 
 -- 2.
 theorem Exercise_5_2_10b {A B C : Type} (f: A → B) (g : B → C) :
