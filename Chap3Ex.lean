@@ -440,20 +440,20 @@ theorem Exercise_3_4_6 (U : Type) (A B C : Set U) :
 -- 3.
 theorem Exercise_3_4_10 (x y : Int)
     (h1 : odd x) (h2 : odd y) : even (x - y) := by
-define
-define at h1
-define at h2
+-- define
+-- define at h1
+-- define at h2
 
-obtain k hk from h1
-obtain j hj from h2
+obtain (k : ℤ) (hk : x = 2*k + 1) from h1
+obtain (j : ℤ) (hj : y = 2*j + 1) from h2
 
 apply Exists.intro (k-j)
 
 rw [hk, hj]
 
-ring
-
+ring!
 done
+
 -- 4.
 theorem Exercise_3_4_27a :
     ∀ (n : Int), 15 ∣ n ↔ 3 ∣ n ∧ 5 ∣ n := sorry
