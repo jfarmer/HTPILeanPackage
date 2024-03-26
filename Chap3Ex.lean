@@ -30,10 +30,9 @@ theorem Exercise_3_2_1b (P Q R : Prop)
 -- 3.
 theorem Exercise_3_2_2a (P Q R : Prop)
     (h1 : P → Q) (h2 : R → ¬Q) : P → ¬R := by
-  assume h3 : P
-  have h4 : Q := h1 h3
+  assume hP
   contrapos at h2
-  show ¬R from h2 h4
+  show ¬R from h2 (h1 hP)
   done
 
 -- 4.
@@ -98,19 +97,19 @@ theorem Exercise_3_3_8 (U : Type) (F : Set (Set U)) (A : Set U)
 theorem Exercise_3_3_9 (U : Type) (F : Set (Set U)) (A : Set U)
     (h1 : A ∈ F) : ⋂₀ F ⊆ A := by
   define
-  fix a
+  fix a : U
   assume h2 : a ∈ ⋂₀ F
   define at h2
-  show a ∈ A from h2 A h1
+  show a ∈ A from (h2 A) h1
   done
 
 -- 4.
 theorem Exercise_3_3_10 (U : Type) (B : Set U) (F : Set (Set U))
     (h1 : ∀ (A : Set U), A ∈ F → B ⊆ A) : B ⊆ ⋂₀ F := by
-  fix a
+  fix a : U
   assume h2 : a ∈ B
   define
-  fix S
+  fix S : Set U
   assume h3 : S ∈ F
   have h4 : B ⊆ S := h1 S h3
   show a ∈ S from h4 h2
@@ -249,7 +248,22 @@ theorem Exercise_3_4_17 (U : Type) (A : Set U) : A = ⋃₀ (𝒫 A) := by
 -- 7.
 theorem Exercise_3_4_18a (U : Type) (F G : Set (Set U)) :
     ⋃₀ (F ∩ G) ⊆ (⋃₀ F) ∩ (⋃₀ G) := by
+  define
+  fix s : U
+  assume h1
+  define at h1
+  define
+  obtain S hS from h1
 
+  apply And.intro
+  · define
+    have hh := hS.left.left
+    apply Exists.intro S
+    exact ⟨hh, hS.right⟩
+  · define
+    have hh := hS.left.right
+    apply Exists.intro S
+    exact ⟨hh, hS.right⟩
   done
 
 -- 8.
@@ -278,7 +292,16 @@ theorem Exercise_3_5_2 (U : Type) (A B C : Set U) :
 
 -- 2.
 theorem Exercise_3_5_5 (U : Type) (A B C : Set U)
-    (h1 : A ∩ C ⊆ B ∩ C) (h2 : A ∪ C ⊆ B ∪ C) : A ⊆ B := sorry
+    (h1 : A ∩ C ⊆ B ∩ C) (h2 : A ∪ C ⊆ B ∪ C) : A ⊆ B := by
+  intro x
+  assume xA : x ∈ A
+  have xAuC : x ∈ A ∪ C := Or.inl xA
+  have xBuC : x ∈ B ∪ C := h2 xAuC
+
+  by_cases on xBuC
+  · exact xBuC
+  · exact (h1 ⟨xA, xBuC⟩).left
+  done
 
 -- 3.
 theorem Exercise_3_5_7 (U : Type) (A B C : Set U) :
@@ -312,6 +335,29 @@ theorem Exercise_3_5_9 (U : Type) (A B : Set U)
     (h1 : 𝒫 (A ∪ B) = 𝒫 A ∪ 𝒫 B) : A ⊆ B ∨ B ⊆ A := by
   --Hint:  Start like this:
   have h2 : A ∪ B ∈ 𝒫 (A ∪ B) := sorry
+  done
+
+/- Section 3.6 -/
+theorem empty_union {U : Type} (B : Set U) :
+    ∅ ∪ B = B := by
+  apply Set.ext
+  fix x : U
+  apply Iff.intro
+  · -- (→)
+    assume h1 : x ∈ ∅ ∪ B
+    define at h1
+    have h2 : x ∉ ∅ := by
+      by_contra h3
+      define at h3  --h3 : False
+      show False from h3
+      done
+    disj_syll h1 h2  --h1 : x ∈ B
+    show x ∈ B from h1
+    done
+  · -- (←)
+    assume h1 : x ∈ B
+    show x ∈ ∅ ∪ B from Or.inr h1
+    done
   done
 
 -- 3.
