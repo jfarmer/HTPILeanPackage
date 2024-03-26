@@ -305,7 +305,33 @@ theorem Exercise_3_5_5 (U : Type) (A B C : Set U)
 
 -- 3.
 theorem Exercise_3_5_7 (U : Type) (A B C : Set U) :
-    A ∪ C ⊆ B ∪ C ↔ A \ C ⊆ B \ C := sorry
+    A ∪ C ⊆ B ∪ C ↔ A \ C ⊆ B \ C := by
+  apply Iff.intro
+  · assume h1 : A ∪ C ⊆ B ∪ C
+    intro x
+    assume xAmC : x ∈ A \ C
+    define
+
+    have xA : x ∈ A := xAmC.left
+    have x!C : x ∉ C := xAmC.right
+    have xAuC : x ∈ A ∪ C := Or.inl xA
+    have xBuC : x ∈ B ∪ C := h1 xAuC
+
+    by_cases on xBuC
+    · exact ⟨xBuC, x!C⟩
+    · by_contra
+      show False from x!C xBuC
+    done
+  · assume h1 : A\C ⊆ B\C
+    intro x
+    assume xAuC : x ∈ A ∪ C
+    or_left with x!C
+    by_cases on xAuC
+    · exact (h1 ⟨xAuC, x!C⟩).left
+    · by_contra
+      show False from x!C xAuC
+    done
+  done
 
 -- 4.
 theorem Exercise_3_5_8 (U : Type) (A B : Set U) :
