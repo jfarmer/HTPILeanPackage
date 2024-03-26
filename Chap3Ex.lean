@@ -119,17 +119,17 @@ theorem Exercise_3_3_10 (U : Type) (B : Set U) (F : Set (Set U))
 theorem Exercise_3_3_13 (U : Type)
     (F G : Set (Set U)) : F ⊆ G → ⋂₀ G ⊆ ⋂₀ F := by
   assume h1 : F ⊆ G
-  define
-  fix y : U
-  assume h2
-  define
-  fix S : Set U
-  assume h3
-  define at h1
+  fix x : U
+  assume h2 : x ∈ ⋂₀G
+  fix A : Set U
+  assume h3 : A ∈ F
   define at h2
-  apply h2
-  apply h1
-  show S ∈ F from h3
+
+  -- apply h2
+  -- apply h1
+  -- exact h3
+
+  exact h2 A (h1 h3)
   done
 
 /- Section 3.4 -/
