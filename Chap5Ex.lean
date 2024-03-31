@@ -179,11 +179,30 @@ theorem Exercise_5_2_21b {A B C : Type} (f : B → C) (a : A)
 /- Section 5.3 -/
 -- 1.
 theorem Theorem_5_3_2_2 {A B : Type} (f : A → B) (g : B → A)
-    (h1 : graph g = inv (graph f)) : f ∘ g = id := sorry
+    (h1 : graph g = inv (graph f)) : f ∘ g = id := by
+
+  apply funext
+  fix b : B
+
+  have h : (b, g b) ∈ inv (graph f) := by
+    rw [← h1]
+    rfl
+    done
+
+  show (f ∘ g) b = id b from h
+  done
 
 -- 2.
 theorem Theorem_5_3_3_2 {A B : Type} (f : A → B) (g : B → A)
-    (h1 : f ∘ g = id) : onto f := sorry
+    (h1 : f ∘ g = id) : onto f := by
+  define
+  fix b : B
+
+  apply Exists.intro (g b)
+
+  rw [← comp_def f g, h1]
+  rfl
+  done
 
 -- 3.
 theorem Exercise_5_3_11a {A B : Type} (f : A → B) (g : B → A) :
@@ -200,7 +219,18 @@ theorem Exercise_5_3_14a {A B : Type} (f : A → B) (g : B → A)
 -- 6.
 theorem Exercise_5_3_18 {A B C : Type} (f : A → C) (g : B → C)
     (h1 : one_to_one g) (h2 : onto g) :
-    ∃ (h : A → B), g ∘ h = f := sorry
+    ∃ (h : A → B), g ∘ h = f := by
+  obtain g_inv h_ginv from Theorem_5_3_1 g h1 h2
+  have h_g_id : (g ∘ g_inv = id) := Theorem_5_3_2_2 g g_inv h_ginv
+
+  apply Exists.intro (g_inv ∘ f)
+
+  show g ∘ g_inv ∘ f = f from
+    calc g ∘ g_inv ∘ f
+      _ = (g ∘ g_inv) ∘ f := by rfl
+      _ = id ∘ f := by rw [h_g_id]
+      _ = f := by rfl
+  done
 
 -- Definition for next two exercises:
 def conjugate (A : Type) (f1 f2 : A → A) : Prop :=
@@ -225,9 +255,40 @@ def complement {A : Type} (B : Set A) : Set A := {a : A | a ∉ B}
 theorem Exercise_5_4_7 {A : Type} (f g : A → A) (C : Set A)
     (h1 : f ∘ g = id) (h2 : closed f C) : closed g (complement C) := sorry
 
+theorem inter_subset_union {A: Type} (X Y : Set A):
+    X ∩ Y ⊆ X ∪ Y := by
+  fix a : A
+  assume ainXY : a ∈ X ∩ Y
+
+  apply Or.inl
+  exact ainXY.left
+  done
+
+theorem inter_of_closed_is_closed {A : Type} (f : A → A) (X Y : Set A)
+    (h1 : closed f X) (h2 : closed f Y) : closed f (X ∩ Y) := by
+
+  define at h1; define at h2; define
+
+  fix a : A
+  assume ainXY
+
+  exact ⟨h1 a ainXY.left, h2 a ainXY.right⟩
+  done
+
 -- 3.
 theorem Exercise_5_4_9a {A : Type} (f : A → A) (C1 C2 : Set A)
-    (h1 : closed f C1) (h2 : closed f C2) : closed f (C1 ∪ C2) := sorry
+    (h1 : closed f C1) (h2 : closed f C2) : closed f (C1 ∪ C2) := by
+  fix a : A
+  define at h1; define at h2
+
+  assume a_in_union : a ∈ C1 ∪ C2
+
+  by_cases on a_in_union
+  · apply Or.inl
+    exact h1 a a_in_union
+  · apply Or.inr
+    exact h2 a a_in_union
+  done
 
 -- 4.
 theorem Exercise_5_4_10a {A : Type} (f : A → A) (B1 B2 C1 C2 : Set A)
