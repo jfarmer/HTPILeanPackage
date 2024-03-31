@@ -65,6 +65,12 @@ theorem Exercise_3_3_1
   show Q a from hQ
   done
 
+
+-- theorem Youv_Example (U : Type) (F G : Set (Set U)) (x : U)
+--     (h1 : ∃ t ∈ F, x ∈ t) (h2 : ∃ t ∈ G, x ∈ t) : ∃ t ∈ F, x ∈ t ∧ ∃ t ∈ G, x ∈ t := by
+--   exact ⟨h1, h2⟩
+--   done
+
 theorem Example_3_3_5 (U : Type) (B : Set U)
     (F : Set (Set U)) : ⋃₀ F ⊆ B → F ⊆ 𝒫 B := by
   assume h1 : ⋃₀ F ⊆ B
@@ -229,14 +235,14 @@ theorem Exercise_3_4_17 (U : Type) (A : Set U) : A = ⋃₀ (𝒫 A) := by
     apply Exists.intro A
     apply And.intro
     · define
-      fix a
-      assume h2
+      fix a : U
+      assume h2 : a ∈ A
       exact h2
     exact h1
     done
   · assume h1 : c ∈ ⋃₀ (𝒫 A)
     define at h1
-    obtain t h2 from h1
+    obtain (t : Set U) (h2 : t ∈ 𝒫 A ∧ c ∈ t) from h1
     exact h2.left h2.right
     done
   done
