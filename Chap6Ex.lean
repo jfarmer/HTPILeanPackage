@@ -50,7 +50,27 @@ theorem Exercise_6_1_9a : ∀ (n : Nat), 2 ∣ n ^ 2 + n := by
 
 -- 4.
 theorem Exercise_6_1_13 :
-    ∀ (a b : Int) (n : Nat), (a - b) ∣ (a ^ n - b ^ n) := sorry
+    ∀ (a b : Int) (n : Nat), (a - b) ∣ (a ^ n - b ^ n) := by
+  fix a : ℤ
+  fix b : ℤ
+
+  by_induc
+  · apply Exists.intro 0
+    ring
+  · fix n : ℕ
+    assume ind_h : a - b ∣ a^n - b^n
+
+    obtain k hk from ind_h
+
+    apply Exists.intro (a*k + b^n)
+
+    show a^(n + 1) - b^(n + 1) = (a - b) * (a*k + b^n) from
+      calc a^(n + 1) - b^(n + 1)
+        _ = a * (a^n - b^n) + b^n * (a - b) := by ring
+        _ = a * ((a - b) * k) + b^n * (a - b) := by rw [hk]
+        _ = (a - b) * (a*k + b^n) := by ring
+    done
+  done
 
 -- 5.
 theorem Exercise_6_1_15 : ∀ n ≥ 10, 2 ^ n > n ^ 3 := sorry
