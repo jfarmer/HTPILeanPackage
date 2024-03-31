@@ -97,7 +97,27 @@ theorem Exercise_5_2_10b {A B C : Type} (f: A → B) (g : B → C) :
 
 -- 3.
 theorem Exercise_5_2_11a {A B C : Type} (f: A → B) (g : B → C) :
-    onto f → ¬(one_to_one g) → ¬(one_to_one (g ∘ f)) := sorry
+    onto f → ¬(one_to_one g) → ¬(one_to_one (g ∘ f)) := by
+  assume hf : onto f
+  contrapos
+  assume hgf : one_to_one (g ∘ f)
+
+  define at hf; define at hgf; define
+
+  fix b1: B
+  fix b2: B
+
+  obtain (a1: A) (ha1: f a1 = b1) from hf b1
+  obtain (a2: A) (ha2: f a2 = b2) from hf b2
+
+  rw [←ha1]
+  rw [←ha2]
+  assume hg
+
+  have ha1_a2: a1 = a2 := hgf a1 a2 hg
+
+  rw [ha1_a2]
+  done
 
 -- 4.
 theorem Exercise_5_2_11b {A B C : Type} (f: A → B) (g : B → C) :
