@@ -121,7 +121,28 @@ theorem Exercise_5_2_11a {A B C : Type} (f: A → B) (g : B → C) :
 
 -- 4.
 theorem Exercise_5_2_11b {A B C : Type} (f: A → B) (g : B → C) :
-    ¬(onto f) → one_to_one g → ¬(onto (g ∘ f)) := sorry
+    ¬(onto f) → one_to_one g → ¬(onto (g ∘ f)) := by
+  assume f_not_surj : ¬(onto f)
+  assume g_inj : one_to_one g
+
+  define at f_not_surj
+  quant_neg at f_not_surj
+
+  obtain (b: B) (hb: ¬∃ (x : A), f x = b) from f_not_surj
+  quant_neg at hb
+
+  define; quant_neg
+
+  apply Exists.intro (g b)
+
+  quant_neg; fix a: A
+
+  -- g (f a) = g b → f a = b
+  have h := g_inj (f a) b
+  contrapos at h
+
+  show (¬g (f a) = g b) from h (hb a)
+  done
 
 -- 5.
 theorem Exercise_5_2_12 {A B : Type} (f : A → B) (g : B → Set A)
