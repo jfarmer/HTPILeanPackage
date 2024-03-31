@@ -4,14 +4,49 @@ namespace HTPI.Exercises
 /- Section 6.1 -/
 -- 1.
 theorem Like_Exercise_6_1_1 :
-    ∀ (n : Nat), 2 * Sum i from 0 to n, i = n * (n + 1) := sorry
+    ∀ (n : Nat), 2 * Sum i from 0 to n, i = n * (n + 1) := by
+  by_induc
+  · rw [sum_base]
+  · fix n : Nat
+    assume ind_h : 2 * Sum i from 0 to n, i = n * (n + 1)
+
+    rw [sum_from_zero_step, left_distrib, ind_h]
+    ring
+  done
 
 -- 2.
 theorem Like_Exercise_6_1_4 :
-    ∀ (n : Nat), Sum i from 0 to n, 2 * i + 1 = (n + 1) ^ 2 := sorry
+    ∀ (n : Nat), Sum i from 0 to n, 2 * i + 1 = (n + 1) ^ 2 := by
+  by_induc
+  · rw [sum_base]
+    ring
+    done
+  · fix n : ℕ
+    assume ind_h : Sum i from 0 to n, 2 * i + 1 = (n + 1) ^ 2
+
+    rw [sum_from_zero_step, ind_h];
+    ring
+    done
+  done
 
 -- 3.
-theorem Exercise_6_1_9a : ∀ (n : Nat), 2 ∣ n ^ 2 + n := sorry
+theorem Exercise_6_1_9a : ∀ (n : Nat), 2 ∣ n ^ 2 + n := by
+  by_induc
+  · decide
+    done
+  · fix n : ℕ
+    assume ind_h : 2 ∣ n ^ 2 + n
+    obtain (k : ℕ) (hk : n ^ 2 + n = 2 * k) from ind_h
+
+    apply Exists.intro (k + n + 1)
+
+    show (n + 1) ^ 2 + (n + 1) = 2 * (k + n + 1) from
+      calc (n + 1) ^ 2 + (n + 1)
+        _ = (n ^ 2 + n) + 2 * (n + 1) := by ring
+        _ = 2 * k + 2 * (n + 1) := by rw [hk]
+        _ = 2 * (k + n + 1) := by ring
+    done
+  done
 
 -- 4.
 theorem Exercise_6_1_13 :
