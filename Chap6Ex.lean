@@ -77,11 +77,44 @@ theorem Exercise_6_1_15 : ∀ n ≥ 10, 2 ^ n > n ^ 3 := sorry
 
 -- 6.
 lemma nonzero_is_successor :
-    ∀ (n : Nat), n ≠ 0 → ∃ (m : Nat), n = m + 1 := sorry
+    ∀ (n : Nat), n ≠ 0 → ∃ (m : Nat), n = m + 1 := by
+  by_induc
+  · assume h1
+    by_contra h2
+    show False from h1 rfl
+    done
+  · fix n : ℕ
+    assume ind_h
+    assume h
+    apply Exists.intro n
+    rfl
+    done
+  done
 
 -- 7.
 theorem Exercise_6_1_16a1 :
-    ∀ (n : Nat), nat_even n ∨ nat_odd n := sorry
+    ∀ (n : Nat), nat_even n ∨ nat_odd n := by
+  by_induc
+  · apply Or.inl
+    apply Exists.intro 0
+    rfl
+    done
+  · fix n : ℕ
+    assume ind_h
+    by_cases on ind_h
+    · right
+      obtain (k : ℕ) (hk : n = 2*k) from ind_h
+      apply Exists.intro k
+      rw [hk]
+      done
+    · left
+      obtain (k : ℕ) (hk : n = 2*k + 1) from ind_h
+      apply Exists.intro (k + 1)
+      rw [hk]
+      ring
+      done
+    done
+  done
 
 -- 8.
 --Hint:  You may find the lemma nonzero_is_successor
