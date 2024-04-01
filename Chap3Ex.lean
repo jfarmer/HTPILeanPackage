@@ -458,7 +458,38 @@ theorem Exercise_3_4_10 (x y : Int)
 
 -- 4.
 theorem Exercise_3_4_27a :
-    ∀ (n : Int), 15 ∣ n ↔ 3 ∣ n ∧ 5 ∣ n := sorry
+    ∀ (n : Int), 15 ∣ n ↔ 3 ∣ n ∧ 5 ∣ n := by
+  fix n : ℤ
+  apply Iff.intro
+  · assume h_15divn : 15 ∣ n
+    obtain (k : ℤ) (hk : n = 15 * k) from h_15divn
+    apply And.intro
+    · apply Exists.intro (5 * k)
+      rw [hk]
+      ring
+      done
+    · apply Exists.intro (3 * k)
+      rw [hk]
+      ring
+      done
+    done
+  · assume h : 3 ∣ n ∧ 5 ∣ n
+    have h_3divn := h.left
+    have h_5divn := h.right
+
+    obtain k hk from h_3divn
+    obtain j hj from h_5divn
+
+    let q := (2 * j - k)
+    apply Exists.intro q
+
+    show n = 15 * q from
+      calc n
+        _ = 6*n - 5*n := by ring
+        _ = 6*(5*j) - 5*(3*k) := by rw [←hj, ←hk]
+        _= 15 * q := by ring
+    done
+  done
 
 -- 5.
 theorem Like_Exercise_3_7_5 (U : Type) (F : Set (Set U))
