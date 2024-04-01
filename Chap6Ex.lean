@@ -7,7 +7,7 @@ theorem Like_Exercise_6_1_1 :
     ∀ (n : Nat), 2 * Sum i from 0 to n, i = n * (n + 1) := by
   by_induc
   · rw [sum_base]
-  · fix n : Nat
+  · fix n : ℕ
     assume ind_h : 2 * Sum i from 0 to n, i = n * (n + 1)
 
     rw [sum_from_zero_step, left_distrib, ind_h]
