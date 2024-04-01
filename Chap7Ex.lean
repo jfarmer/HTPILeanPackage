@@ -4,7 +4,18 @@ namespace HTPI.Exercises
 /- Section 7.1 -/
 -- 1.
 theorem dvd_a_of_dvd_b_mod {a b d : Nat}
-    (h1 : d ∣ b) (h2 : d ∣ (a % b)) : d ∣ a := sorry
+    (h1 : d ∣ b) (h2 : d ∣ (a % b)) : d ∣ a := by
+  let q : ℕ := a / b
+  have h3 : b * q + a % b = a := Nat.div_add_mod a b
+
+  obtain k hk from h1
+  obtain j hj from h2
+
+  apply Exists.intro (k * q + j)
+
+  rw [h3.symm, hj, hk]
+  ring
+  done
 
 -- 2.
 lemma gcd_comm_lt {a b : Nat} (h : a < b) : gcd a b = gcd b a := sorry
