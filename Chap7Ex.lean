@@ -18,9 +18,24 @@ theorem dvd_a_of_dvd_b_mod {a b d : Nat}
   done
 
 -- 2.
-lemma gcd_comm_lt {a b : Nat} (h : a < b) : gcd a b = gcd b a := sorry
+lemma gcd_comm_lt {a b : Nat} (h : a < b) : gcd a b = gcd b a := by
+  have h1 : b ≠ 0 := Nat.not_eq_zero_of_lt h
+  have h2 : a % b = a := Nat.mod_eq_of_lt h
 
-theorem gcd_comm (a b : Nat) : gcd a b = gcd b a := sorry
+  rw [gcd_nonzero a h1, h2]
+  done
+
+theorem gcd_comm (a b : Nat) : gcd a b = gcd b a := by
+  by_cases h1 : a < b
+  · exact gcd_comm_lt h1
+  · by_cases h2 : b = a
+    · rw [h2]
+    · have h3 : a ≥ b := Nat.ge_of_not_lt h1
+      have h4 : b < a := Nat.lt_of_le_of_ne (ge_iff_le.mp h3) h2
+
+      rw [(gcd_comm_lt h4).symm]
+      done
+  done
 
 -- 3.
 theorem Exercise_7_1_5 (a b : Nat) (n : Int) :
