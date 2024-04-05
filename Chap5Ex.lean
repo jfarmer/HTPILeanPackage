@@ -214,9 +214,41 @@ theorem Theorem_5_3_3_2 {A B : Type} (f : A → B) (g : B → A)
   rfl
   done
 
+lemma inj_right_inv_is_left_inv {A B : Type} (f : A → B) (g : B → A)
+    (h1 : one_to_one f) (h2 : f ∘ g = id) :
+    g ∘ f = id := by
+
+  define at h1
+
+  apply funext
+  fix a : A
+
+  have h : f (g (f a)) = f a := by
+    calc f (g (f a))
+      _ = (f ∘ g) (f a) := by rfl
+      _ = id (f a) := by rw [h2]
+      _ = f a := by rfl
+    done
+
+  apply h1 (g (f a)) a
+  exact h
+  done
+
 -- 3.
 theorem Exercise_5_3_11a {A B : Type} (f : A → B) (g : B → A) :
-    one_to_one f → f ∘ g = id → graph g = inv (graph f) := sorry
+    one_to_one f → f ∘ g = id → graph g = inv (graph f) := by
+
+  assume h_f_inj : one_to_one f
+  assume h_fog_id : f ∘ g = id
+
+  have h_f_onto : onto f :=
+    Theorem_5_3_3_2 f g h_fog_id
+
+  have h_gof_id : g ∘ f = id :=
+    inj_right_inv_is_left_inv f g h_f_inj h_fog_id
+
+  exact Theorem_5_3_5 f g h_gof_id h_fog_id
+  done
 
 -- 4.
 theorem Exercise_5_3_11b {A B : Type} (f : A → B) (g : B → A) :
