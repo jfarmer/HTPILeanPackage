@@ -5,8 +5,10 @@ namespace HTPI.Exercises
 -- 1.
 theorem func_from_graph_ltr {A B : Type} (F : Set (A × B)) :
     (∃ (f : A → B), graph f = F) → is_func_graph F := by
-  assume h1
-  obtain f hf from h1
+
+  assume h1 : ∃ (f : A → B), graph f = F
+  obtain (f : A → B) (hf : graph f = F) from h1
+
   define
 
   fix a : A
@@ -15,11 +17,17 @@ theorem func_from_graph_ltr {A B : Type} (F : Set (A × B)) :
   · apply Exists.intro (f a)
     rw [←hf]
     rfl
-  · fix b1; fix b2
-    assume hb1; assume hb2
-    rw [←hf] at hb1
-    rw [←hf] at hb2
+  · fix b1 : B
+    fix b2 : B
+
+    assume hb1 : (a, b1) ∈ F
+    assume hb2 : (a, b2) ∈ F
+
+    rewrite [←hf] at hb1
+    rewrite [←hf] at hb2
+
     define at hb1; define at hb2
+
     rw [←hb1, ←hb2]
   done
 
@@ -68,11 +76,13 @@ theorem Exercise_5_1_17b {A : Type} (f : A → A) (a : A)
 -- 1.
 theorem Exercise_5_2_10a {A B C : Type} (f: A → B) (g : B → C) :
     onto (g ∘ f) → onto g := by
-  assume hgof
+
+  assume hgof : onto (g ∘ f)
   define at hgof; define
+
   fix c : C
 
-  obtain a ha from hgof c
+  obtain (a : A) (ha : (g ∘ f) a = c) from hgof c
 
   apply Exists.intro (f a)
   exact ha
@@ -81,16 +91,16 @@ theorem Exercise_5_2_10a {A B C : Type} (f: A → B) (g : B → C) :
 -- 2.
 theorem Exercise_5_2_10b {A B C : Type} (f: A → B) (g : B → C) :
     one_to_one (g ∘ f) → one_to_one f := by
-  assume igof
+
+  assume igof : one_to_one (g ∘ f)
   define at igof;define
 
-  fix a1;fix a2
-  assume hfa
+  fix a1 : A
+  fix a2 : A
 
-  have hgf : (g ∘ f) a1 = (g ∘ f) a2 := by
-    rw [comp_def]; rw [comp_def]
-    rw [hfa]
-    done
+  assume hfa : f a1 = f a2
+
+  have hgf : (g ∘ f) a1 = (g ∘ f) a2 := by rw [comp_def, comp_def, hfa]
 
   exact igof a1 a2 hgf
   done
@@ -98,6 +108,7 @@ theorem Exercise_5_2_10b {A B C : Type} (f: A → B) (g : B → C) :
 -- 3.
 theorem Exercise_5_2_11a {A B C : Type} (f: A → B) (g : B → C) :
     onto f → ¬(one_to_one g) → ¬(one_to_one (g ∘ f)) := by
+
   assume hf : onto f
   contrapos
   assume hgf : one_to_one (g ∘ f)
@@ -110,8 +121,7 @@ theorem Exercise_5_2_11a {A B C : Type} (f: A → B) (g : B → C) :
   obtain (a1: A) (ha1: f a1 = b1) from hf b1
   obtain (a2: A) (ha2: f a2 = b2) from hf b2
 
-  rw [←ha1]
-  rw [←ha2]
+  rewrite [←ha1, ←ha2]
   assume hg
 
   have ha1_a2: a1 = a2 := hgf a1 a2 hg
