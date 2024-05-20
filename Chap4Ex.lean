@@ -42,7 +42,49 @@ theorem Exercise_4_2_9b {A B C : Type} (R : Set (A × B))
 -- 3.
 --Fill in the blank to get a correct theorem and then prove the theorem
 theorem Exercise_4_2_9c {A B C : Type} (R : Set (A × B))
-    (S : Set (B × C)) : ___ → Ran (comp S R) = Ran S := sorry
+    (S : Set (B × C)) : Ran R = Dom S → Ran (comp S R) = Ran S := by
+
+  assume h1 : Ran R = Dom S
+  ext c
+
+  apply Iff.intro
+  ·
+    assume h2 : c ∈ Ran (comp S R)
+    define at h2
+
+    obtain (a: A) (h3: (a, c) ∈ comp S R) from h2
+    define at h3
+
+    obtain (b : B) (h4: (a, b) ∈ R ∧ (b, c) ∈ S) from h3
+    define
+
+    apply Exists.intro b
+    exact h4.right
+    done
+  ·
+    assume h2 : c ∈ Ran S
+    define at h2
+    obtain (b: B) (h3: (b, c) ∈ S) from h2
+
+    have h4: b ∈ Dom S := by
+      define
+      apply Exists.intro c
+      exact h3
+      done
+
+    rw [← h1] at h4
+
+    define at h4
+    obtain (a : A) (h5 : (a, b) ∈ R) from h4
+
+    define
+    apply Exists.intro a
+    define
+    apply Exists.intro b
+
+    exact ⟨h5, h3⟩
+    done
+  done
 
 -- 4.
 theorem Exercise_4_2_12a {A B C : Type}
