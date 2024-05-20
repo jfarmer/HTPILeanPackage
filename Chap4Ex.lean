@@ -8,7 +8,36 @@ theorem Exercise_4_2_9a {A B C : Type} (R : Set (A × B))
 
 -- 2.
 theorem Exercise_4_2_9b {A B C : Type} (R : Set (A × B))
-    (S : Set (B × C)) : Ran R ⊆ Dom S → Dom (comp S R) = Dom R := sorry
+    (S : Set (B × C)) : Ran R ⊆ Dom S → Dom (comp S R) = Dom R := by
+
+  assume h1 : Ran R ⊆ Dom S
+  ext a
+
+  apply Iff.intro
+  · assume h2 : a ∈ Dom (comp S R)
+    obtain (c : C) (h3 : (a, c) ∈ comp S R) from h2
+    obtain (b : B) (h4 : (a, b) ∈ R ∧ (b, c) ∈ S) from h3
+
+    apply Exists.intro b
+    exact h4.left
+    done
+  · assume h2 : a ∈ Dom R
+    obtain (b: B) (h3: (a, b) ∈ R) from h2
+
+    have h4: b ∈ Ran R := by
+      apply Exists.intro a
+      exact h3
+      done
+
+    have h5 : b ∈ Dom S := h1 h4
+
+    obtain (c : C) (h6 : (b, c) ∈ S) from h5
+
+    apply Exists.intro c
+    apply Exists.intro b
+    exact ⟨h3, h6⟩
+    done
+  done
 
 -- 3.
 --Fill in the blank to get a correct theorem and then prove the theorem
