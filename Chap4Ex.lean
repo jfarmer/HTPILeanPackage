@@ -116,12 +116,65 @@ example :
 
 -- 2.
 theorem Theorem_4_3_4_1 {A : Type} (R : BinRel A) :
-    reflexive R ↔ {(x, y) : A × A | x = y} ⊆ extension R := sorry
+    reflexive R ↔ {(x, y) : A × A | x = y} ⊆ extension R := by
+  apply Iff.intro
+  ·
+    assume h1 : reflexive R
+    define at h1
+    define
+    fix (a, a') : A × A
+    assume h2 : (a, a') ∈ {(x, y) : A × A | x = y}
+
+    define at h2
+    define
+
+    rw [← h2]
+    exact h1 a
+    done
+  ·
+    assume h1 : {(x, y) : A × A | x = y} ⊆ extension R
+    define at h1
+    fix a : A
+
+    have h2 : (a, a) ∈ { (x, y) : A × A | x = y } := by rfl
+
+    exact h1 h2
+    done
+  done
 
 -- 3.
 theorem Theorem_4_3_4_3 {A : Type} (R : BinRel A) :
     transitive R ↔
-      comp (extension R) (extension R) ⊆ extension R := sorry
+      comp (extension R) (extension R) ⊆ extension R := by
+    apply Iff.intro
+    ·
+      assume h1 : transitive R
+      define at h1
+      define
+      fix (a, a')
+      assume h2
+      define at h2
+
+      obtain (x : A) (h3 : (a, x) ∈ extension R ∧ (x, a') ∈ extension R) from h2
+
+      have h4 : R a x → R x a' → R a a' := h1 a x a'
+
+      exact h4 h3.left h3.right
+
+      done
+    ·
+      assume h1
+      define at h1
+      define
+
+      fix x; fix y; fix z
+
+      assume h2 : R x y
+      assume h3 : R y z
+
+
+      done
+    done
 
 -- 4.
 theorem Exercise_4_3_12a {A : Type} (R : BinRel A) (h1 : reflexive R) :
