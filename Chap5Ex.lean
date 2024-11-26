@@ -77,19 +77,21 @@ theorem Exercise_5_1_17b {A : Type} (f : A → A) (a : A)
 theorem Exercise_5_2_10a {A B C : Type} (f: A → B) (g : B → C) :
     onto (g ∘ f) → onto g := by
 
-  assume hgof : onto (g ∘ f)
-  define at hgof; define
+  assume h_gof_onto : onto (g ∘ f)
+  define at h_gof_onto; define
 
   fix c : C
 
-  obtain (a : A) (ha : (g ∘ f) a = c) from hgof c
+  obtain (a : A) (ha : (g ∘ f) a = c) from h_gof_onto c
 
   apply Exists.intro (f a)
   exact ha
   done
 
 -- 2.
-theorem Exercise_5_2_10b {A B C : Type} (f: A → B) (g : B → C) :
+theorem Exercise_5_2_10b
+    {A B C : Type}
+    (f: A → B) (g : B → C) :
     one_to_one (g ∘ f) → one_to_one f := by
 
   assume igof : one_to_one (g ∘ f)
